@@ -13,6 +13,7 @@ from sklearn.preprocessing import StandardScaler
 
 #Altera a fonte de todo o grafico para uma familia sem serifa
 plt.rcParams['font.family'] = 'sans-serif'
+
 #Especifica quais fontes do sistema o Matplotlib deve tentar usar
 plt.rcParams['font.sans-serif'] = ['Helvetica', 'Arial', 'Dejavu Sans']
 
@@ -21,34 +22,49 @@ tabela = pd.read_csv("diabetes_prediction_dataset.csv")
 
 #limpeza dos dados do arquivo csv
 def limpar_dados(tabela_suja: pd.DataFrame) -> pd.DataFrame:
-  tabela_limpa = tabela_suja.dropna(axis = 'index', how = 'any')  #axis = 0 e axis = 'index' remove a coluna. axis = 1 e axis = 'columns' remove a coluna
+  tabela_limpa = tabela_suja.dropna(axis = 'index', how = 'any')  #axis = 0 e axis = 'index' remove a linha. axis = 1 e axis = 'columns' remove a coluna
+  
   return tabela_limpa
 
 tabela_limpa = limpar_dados(tabela) 
 
+#traducao de string para binario
+def string_para_binario(tabela_a_binarizar: pd.DataFrame) -> pd.DataFrame:
+  tabela_apos_binarizacao = pd.get_dummies(tabela_a_binarizar, prefix=None, columns=['gender','smoking_history'], dtype=int)
+
+  return tabela_apos_binarizacao
+
+tabela_binarizada = string_para_binario(tabela_limpa)
+
 #conversao para matriz X e vetor y
 def conversao_matriz_vetor(tabela_incompleta: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
-  matriz = tabela_incompleta[['gender', 'age', 'hypertension', 'heart-disease', 'smoking_history', 'bmi', 'HbA1c_level', 'blood_glucose_level']]
+  matriz = tabela_incompleta[['age', 'hypertension', 'heart_disease', 'bmi', 'HbA1c_level',
+       'blood_glucose_level', 'gender_Female', 'gender_Male',
+       'gender_Other', 'smoking_history_No Info', 'smoking_history_current',
+       'smoking_history_ever', 'smoking_history_former',
+       'smoking_history_never', 'smoking_history_not current']]
   vetor = tabela_incompleta['diabetes']
+
   return matriz, vetor
 
-X, y = conversao_matriz_vetor(tabela_limpa)
+X, y = conversao_matriz_vetor(tabela_binarizada)
 
 X_treino, X_teste, y_treino, y_teste = train_test_split(X, y, test_size=0.2, random_state=42)
 
 #escalonando as colunas igualmente (fazendo ficarem na mesma escala matematica de variancia)
-def escalonando(X_treino_escalonamento: pd.DataFrame, X_teste_escalonamento: pd.DataFrane) -> tuple[pd.DataFrame, pd.DataFrame]:
+def escalonando(X_treino_escalonamento: pd.DataFrame, X_teste_escalonamento: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
   
   if sp.issparse(X_treino_escalonamento) or sp.issparse(X_teste_escalonamento):
     escalonador = StandardScaler(with_mean=False)
   else:
     escalonador = StandardScaler()
   
-  escalonador.fit_transform(X_treino_escalonamento)
-  escalonador.transform(X_teste_escalonamento)
-  return X_treino_escalonamento
+  X_treino_escalonamento= escalonador.fit_transform(X_treino_escalonamento)
+  X_teste_escalonamento= escalonador.transform(X_teste_escalonamento)
 
-X_treino_escalonado = escalonando(X_treino, X_teste)
+  return X_treino_escalonamento, X_teste_escalonamento
+
+X_treino_escalonado, X_teste_escalonado = escalonando(X_treino, X_teste)
 
 #instanciamento e treinamento do modelo
 def treinar_modelo(X_exercicio: pd.DataFrame, y_exercicio: pd.Series) -> DecisionTreeClassifier:
@@ -56,14 +72,14 @@ def treinar_modelo(X_exercicio: pd.DataFrame, y_exercicio: pd.Series) -> Decisio
   modelo.fit(X_exercicio, y_exercicio)
   return modelo
 
-modelo_treinado = treinar_modelo(X_treino, y_treino)
+modelo_treinado = treinar_modelo(X_treino_escalonado, y_treino)
 
 #realizamento da "prova" pela IA utilizando predict
-def avaliar_modelo(modelo_em_avaliacao: DecisionTreeClassifier) -> np.ndarray:
-  previsoes = modelo_em_avaliacao.predict(X_teste)
+def avaliar_modelo(modelo_em_avaliacao: DecisionTreeClassifier, X_teste_pronto) -> np.ndarray:
+  previsoes = modelo_em_avaliacao.predict(X_teste_pronto)
   return previsoes
 
-deducoes_modelo = avaliar_modelo(modelo_treinado)
+deducoes_modelo = avaliar_modelo(modelo_treinado, X_teste_escalonado)
 
 #precisao, recall e f1 - scores que avaliam o quanto o modelo eh preciso com falsos positivos, falsos negativos, verdadeiros positivos e negativos
 precision = precision_score(y_teste, deducoes_modelo)
@@ -75,19 +91,20 @@ f1= f1_score(y_teste, deducoes_modelo)
 #passo 1 = extrair os valores da matriz de confusao - tn = true negative, fp = false positive, fn = false negative e tp = true positive
 tn, fp, fn, tp = confusion_matrix(y_teste, deducoes_modelo).ravel()
 
+#Criar as strings formatadas combinando: "Valor (Porcentagem)"
+texto_tn = f"{tn}\n({(tn / ) * 100:.1f})"
+texto_fp = f"{fp}\n({(fp / ) * 100:.1f}%)"
+texto_fn = f"{fn}\n({(fn / ) * 100:.1f}%)"
+texto_tp = f"{tp}\n({(tp / ) * 100:.1f}%)"
+
+
 def grafico_barras():
-    #calcular os totais reais por classe para descobrir as porcentagens 
+  #calcular os totais reais por classe para descobrir as porcentagens 
   total_classe_A = tn + fp    #Total de amostras que sao realmente Classe A
   total_classe_B = fn + tp    #Total de amostras que sao realmente Classe B
 
-  #Criar as strings formatadas combinando: "Valor (Porcentagem)"
-  texto_tn = f"{tn}\n({(tn / total_classe_A) * 100:.1f})"
-  texto_fp = f"{fp}\n({(fp / total_classe_A) * 100:.1f}%)"
-  texto_fn = f"{fn}\n({(fn / total_classe_B) * 100:.1f}%)"
-  texto_tp = f"{tp}\n({(tp / total_classe_B) * 100:.1f}%)"
-
   #Estruturar os dados para os eixos do graficos
-  classes = ['Classe A (Baixo risco)', 'Classe B (Fraude)']
+  classes = ['Classe A (Baixo risco)', 'Classe B (Alto risco)']
   acertos = [tn, tp]
   erros = [fp, fn]
 
@@ -121,15 +138,9 @@ def grafico_barras():
   plt.tight_layout()
   plt.show()
 
-#def mapa_calor():
+def mapa_calor():
+  sns.heatmap()
 
-  #disp = ConfusionMatrixDisplay.from_predictions(
-    #y_teste,
-    #deducoes_modelo,
-    #display_labels = ['Baixo risco', 'Alto risco'],
-    #cmap = plt.cm.Reds
-  #)
-
-  #plt.show()
 
 print(classification_report(y_teste, deducoes_modelo, target_names=['Baixo risco','Alto risco']))
+grafico_barras()
