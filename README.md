@@ -152,7 +152,7 @@ Contribuições são muito bem-vindas! Se você tem alguma ideia para melhorar e
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://github.com/Joao-Dolabella/previsao-diabetes-machine-learning/blob/main/LICENSE) para mais detalhes.
 
 ---
 
@@ -162,9 +162,3 @@ Desenvolvido por **João Vitor Ribeiro Dolabella**.
 
 * **LinkedIn:** [Acesse meu perfil profissional](https://www.linkedin.com/in/jo%C3%A3o-vitor-ribeiro-dolabella/)
 * **E-mail:** [dolabella.dev@gmail.com](https://www.google.com/search?q=mailto%3Adolabella.dev%40gmail.com)
-
-```
-### Lembrete Final de Ouro
-Para que aquelas imagens apareçam perfeitamente quando as pessoas entrarem no seu repositório, você precisa garantir que os arquivos `.png` (`grafico_importancia.png`, `grafico_barras_previsao_diabetes.png`, etc.) façam parte do seu commit e estejam salvos soltos dentro da pasta principal do GitHub, exatamente com esses nomes!
-
-```
