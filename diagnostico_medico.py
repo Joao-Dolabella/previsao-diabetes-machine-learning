@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.preprocessing import StandardScaler
 import joblib
+from sklearn.ensemble import RandomForestClassifier
 
 #Configuracao global da fonte
 
@@ -101,7 +102,7 @@ X_treino_escalonado, X_teste_escalonado, escalonador_treinado = escalonando(X_tr
 
 #instanciamento e treinamento do modelo
 def treinar_modelo(X_exercicio: pd.DataFrame, y_exercicio: pd.Series) -> DecisionTreeClassifier:
-  modelo = DecisionTreeClassifier(max_depth= 5, class_weight='balanced')
+  modelo = RandomForestClassifier(n_estimators=100, max_depth=5, class_weight='balanced', random_state=42)
   modelo.fit(X_exercicio, y_exercicio)
   return modelo
 

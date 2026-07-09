@@ -7,9 +7,9 @@
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 
 ## 📌 Descrição do Projeto
-Em um ambiente hospitalar, o diagnóstico precoce e preciso de diabetes salva vidas e otimiza recursos. Este projeto é um sistema de **Machine Learning (Árvore de Decisão)** desenvolvido para atuar como um "segundo olhar" médico, triando pacientes com base em seus exames de sangue e histórico de saúde. 
+Em um ambiente hospitalar, o diagnóstico precoce e preciso de diabetes salva vidas e otimiza recursos. Este projeto é um sistema de **Machine Learning (Random Forest)** desenvolvido para atuar como um "segundo olhar" médico, triando pacientes com base em seus exames de sangue e histórico de saúde. 
 
-O modelo foi projetado com um foco rigoroso na área da saúde, possuindo um *recall* de **95% para pacientes de alto risco**, garantindo que quase nenhum doente passe despercebido. Além disso, o sistema conta com uma esteira automatizada de auditoria de dados, que trata valores faltantes no prontuário utilizando imputação estatística (Média para exames, Moda para dados cadastrais), evitando a perda de histórico de pacientes.
+O modelo foi projetado com um foco rigoroso na área da saúde, possuindo um *recall* de **89% para pacientes de alto risco**, garantindo que quase nenhum doente passe despercebido e uma *acurácia* de **92% para pacientes de abaixo risco**, garantido que quase nenhum paciente saudável seja mantido no hospital com suspeita de estar doente. Além disso, o sistema conta com uma esteira automatizada de auditoria de dados, que trata valores faltantes no prontuário utilizando imputação estatística (Média para exames, Moda para dados cadastrais), evitando a perda de histórico de pacientes.
 
 ---
 
@@ -47,10 +47,12 @@ Nenhum exame numérico nulo encontrado.
 --- AUDITORIA DE CADASTRO (TEXTOS) ---
 Nenhum dado de texto nulo encontrado.
 
-              precision    recall  f1-score   support
- Baixo Risco       0.99      0.82      0.90     18292
-  Alto Risco       0.32      0.95      0.48      1708
+                precision   recall   f1-score   support
 
+ Baixo Risco       0.99      0.92      0.95     18292
+  Alto Risco       0.51      0.89      0.65      1708
+
+    accuracy                           0.92     20000
 ```
 
 ---
