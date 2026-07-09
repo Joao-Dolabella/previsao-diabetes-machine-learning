@@ -153,6 +153,6 @@ Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes
 
 Desenvolvido por João Vitor Ribeiro Dolabella.
 
-    LinkedIn: Acesse meu perfil profissional
+    LinkedIn: https://www.linkedin.com/in/jo%C3%A3o-vitor-ribeiro-dolabella/
 
     E-mail: dolabella.dev@gmail.com
