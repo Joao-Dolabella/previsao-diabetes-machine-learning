@@ -14,14 +14,14 @@ O modelo foi projetado com um foco rigoroso na área da saúde, possuindo um *re
 ---
 
 ## 🛠️ Índice
-- [Demonstração Visual](#-demonstração-visual)
-- [Pré-requisitos](#-pré-requisitos)
-- [Instalação e Uso](#-instalação-e-uso)
-- [Destaques da Arquitetura de Dados](#-destaques-da-arquitetura-de-dados)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Como Contribuir](#-como-contribuir)
-- [Licença](#-licença)
-- [Contato](#-contato)
+- [Demonstração Visual](#demonstração-visual)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação e Uso](#instalação-e-uso)
+- [Destaques da Arquitetura de Dados](#destaques-da-arquitetura-de-dados)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Como Contribuir](#como-contribuir)
+- [Licença](#licença)
+- [Contato](#contato)
 
 ---
 
@@ -30,14 +30,14 @@ O modelo foi projetado com um foco rigoroso na área da saúde, possuindo um *re
 O sistema gera automaticamente relatórios visuais essenciais para a explicabilidade da IA (*Explainable AI*) perante a equipe médica. 
 
 * **Relação de Importância dos Exames:** Mostra quais fatores a IA considerou mais graves para o diagnóstico.
-![Importância dos Exames](./grafico_importancia.png)
+![Importância dos Exames](grafico_importancia.png)
 
 * **Análise Detalhada (Acertos e Erros):** Visão corporativa sobre a performance do sistema.
-![Gráfico de Barras](./grafico_barras_previsao_diabetes.png)
+![Gráfico de Barras](grafico_barras_previsao_diabetes.png)
 
 * **Matriz de Confusão e Correlação:** O panorama estatístico e o "Raio-X" das variáveis do hospital.
-![Matriz de Confusão](./mapa_calor.png) 
-![Matriz de Correlação](./mapa_correlacao.png)
+![Matriz de Confusão](mapa_calor.png) 
+![Matriz de Correlação](mapa_correlacao.png)
 
 ### Output do Terminal (Auditoria Médica em Tempo Real)
 ```text
@@ -53,50 +53,54 @@ Nenhum dado de texto nulo encontrado.
 
 ```
 
-⚙️ Pré-requisitos
+---
 
-Para rodar este projeto localmente, você precisará do Python 3.8+ instalado em sua máquina.
+## ⚙️ Pré-requisitos
+
+Para rodar este projeto localmente, você precisará do **Python 3.8+** instalado em sua máquina.
 
 As bibliotecas necessárias são:
 
-    pandas
+* `pandas`
+* `numpy`
+* `scikit-learn`
+* `matplotlib`
+* `seaborn`
+* `scipy`
+* `joblib`
 
-    numpy
+---
 
-    scikit-learn
+## 🚀 Instalação e Uso
 
-    matplotlib
+**1. Clone o repositório:**
 
-    seaborn
+```bash
+git clone [https://github.com/Joao-Dolabella/previsao-diabetes-machine-learning.git](https://github.com/Joao-Dolabella/previsao-diabetes-machine-learning.git)
+cd previsao-diabetes-machine-learning
 
-    scipy
+```
 
-    joblib
+**2. Instale as dependências:**
 
-🚀 Instalação e Uso
-
-1. Clone o repositório:
-Bash
-
-git clone [https://github.com/SEU_USUARIO/modelo_diagnostico_diabetes.git](https://github.com/SEU_USUARIO/modelo_diagnostico_diabetes.git)
-cd modelo_diagnostico_diabetes
-
-2. Instale as dependências:
-Bash
-
+```bash
 pip install pandas numpy scikit-learn matplotlib seaborn scipy joblib
 
-3. Execute o script principal:
-Bash
+```
 
+**3. Execute o script principal:**
+
+```bash
 python3 diagnostico_medico.py
 
-Exemplos de Uso (Deploy)
+```
 
-Ao executar o script, o sistema não apenas avaliará os dados, mas também exportará o "cérebro" treinado para produção em formato .joblib.
+### Exemplos de Uso (Deploy)
+
+Ao executar o script, o sistema não apenas avaliará os dados, mas também **exportará o "cérebro" treinado** para produção em formato `.joblib`.
 Para prever o risco de um novo paciente em uma aplicação hospitalar real, basta carregar o modelo e o escalonador exportados:
-Python
 
+```python
 import joblib
 
 # 1. Carrega a IA treinada e a régua de transformação do hospital
@@ -110,49 +114,57 @@ escalonador = joblib.load('escalonador_diabetes.joblib')
 # dados_escalonados = escalonador.transform(paciente_novo)
 # diagnostico = modelo.predict(dados_escalonados)
 
-🧠 Destaques da Arquitetura de Dados
+```
+
+---
+
+## 🧠 Destaques da Arquitetura de Dados
 
 Este projeto foi construído seguindo as melhores práticas da indústria de Engenharia e Ciência de Dados:
 
-    Prevenção de Data Leakage: O StandardScaler é ajustado apenas nos dados de treino, impedindo que o modelo "espie" as variações dos dados de teste.
+* **Prevenção de *Data Leakage*:** O `StandardScaler` é ajustado **apenas** nos dados de treino, impedindo que o modelo "espie" as variações dos dados de teste.
+* **Auditoria Robusta:** A função `auditar_e_corrigir_dados` inspeciona silenciosamente os dados vitais. Caso falte o IMC ou Glicose, imputa a Média. Caso falte gênero ou status de fumante, imputa a Moda.
+* **Tunning contra *Overfitting*:** A Árvore de Decisão foi instanciada com limites lógicos (`max_depth=5`) e um balanceador de classes (`class_weight='balanced'`), impedindo-a de decorar o gabarito de pacientes saudáveis.
 
-    Auditoria Robusta: A função auditar_e_corrigir_dados inspeciona silenciosamente os dados vitais. Caso falte o IMC ou Glicose, imputa a Média. Caso falte gênero ou status de fumante, imputa a Moda.
+---
 
-    Tunning contra Overfitting: A Árvore de Decisão foi instanciada com limites lógicos (max_depth=5) e um balanceador de classes (class_weight='balanced'), impedindo-a de decorar o gabarito de pacientes saudáveis.
+## 💻 Tecnologias Utilizadas
 
-💻 Tecnologias Utilizadas
+* **Python:** Linguagem base.
+* **Pandas & NumPy:** Ingestão, limpeza, tratamento e manipulação de DataFrames.
+* **Scikit-Learn:** Pré-processamento matemático e instanciação do algoritmo de Machine Learning.
+* **Matplotlib & Seaborn:** Visualização gráfica de alto nível.
+* **Joblib:** Serialização e exportação do modelo (Deploy).
 
-    Python: Linguagem base.
+---
 
-    Pandas & NumPy: Ingestão, limpeza, tratamento e manipulação de DataFrames.
+## 🤝 Como Contribuir
 
-    Scikit-Learn: Pré-processamento matemático e instanciação do algoritmo de Machine Learning.
+Contribuições são muito bem-vindas! Se você tem alguma ideia para melhorar este modelo (como testar um *Random Forest* ou *XGBoost*), siga os passos:
 
-    Matplotlib & Seaborn: Visualização gráfica de alto nível.
+1. Faça um *Fork* do projeto
+2. Crie uma nova *Branch* (`git checkout -b feature/NovaAnalise`)
+3. Faça o *Commit* das suas alterações (`git commit -m 'Adicionando novo modelo preditivo'`)
+4. Faça o *Push* para a Branch (`git push origin feature/NovaAnalise`)
+5. Abra um *Pull Request*
 
-    Joblib: Serialização e exportação do modelo (Deploy).
+---
 
-🤝 Como Contribuir
+## 📄 Licença
 
-Contribuições são muito bem-vindas! Se você tem alguma ideia para melhorar este modelo (como testar um Random Forest ou XGBoost), siga os passos:
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para mais detalhes.
 
-    Faça um Fork do projeto
+---
 
-    Crie uma nova Branch (git checkout -b feature/NovaAnalise)
+## ✉️ Contato
 
-    Faça o Commit das suas alterações (git commit -m 'Adicionando novo modelo preditivo')
+Desenvolvido por **João Vitor Ribeiro Dolabella**.
 
-    Faça o Push para a Branch (git push origin feature/NovaAnalise)
+* **LinkedIn:** [Acesse meu perfil profissional](https://www.linkedin.com/in/jo%C3%A3o-vitor-ribeiro-dolabella/)
+* **E-mail:** [dolabella.dev@gmail.com](https://www.google.com/search?q=mailto%3Adolabella.dev%40gmail.com)
 
-    Abra um Pull Request
+```
+### Lembrete Final de Ouro
+Para que aquelas imagens apareçam perfeitamente quando as pessoas entrarem no seu repositório, você precisa garantir que os arquivos `.png` (`grafico_importancia.png`, `grafico_barras_previsao_diabetes.png`, etc.) façam parte do seu commit e estejam salvos soltos dentro da pasta principal do GitHub, exatamente com esses nomes!
 
-📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-✉️ Contato
-
-Desenvolvido por João Vitor Ribeiro Dolabella.
-
-    LinkedIn: https://www.linkedin.com/in/jo%C3%A3o-vitor-ribeiro-dolabella/
-
-    E-mail: dolabella.dev@gmail.com
+```
