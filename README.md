@@ -50,3 +50,109 @@ Nenhum dado de texto nulo encontrado.
               precision    recall  f1-score   support
  Baixo Risco       0.99      0.82      0.90     18292
   Alto Risco       0.32      0.95      0.48      1708
+
+```
+
+⚙️ Pré-requisitos
+
+Para rodar este projeto localmente, você precisará do Python 3.8+ instalado em sua máquina.
+
+As bibliotecas necessárias são:
+
+    pandas
+
+    numpy
+
+    scikit-learn
+
+    matplotlib
+
+    seaborn
+
+    scipy
+
+    joblib
+
+🚀 Instalação e Uso
+
+1. Clone o repositório:
+Bash
+
+git clone [https://github.com/SEU_USUARIO/modelo_diagnostico_diabetes.git](https://github.com/SEU_USUARIO/modelo_diagnostico_diabetes.git)
+cd modelo_diagnostico_diabetes
+
+2. Instale as dependências:
+Bash
+
+pip install pandas numpy scikit-learn matplotlib seaborn scipy joblib
+
+3. Execute o script principal:
+Bash
+
+python3 diagnostico_medico.py
+
+Exemplos de Uso (Deploy)
+
+Ao executar o script, o sistema não apenas avaliará os dados, mas também exportará o "cérebro" treinado para produção em formato .joblib.
+Para prever o risco de um novo paciente em uma aplicação hospitalar real, basta carregar o modelo e o escalonador exportados:
+Python
+
+import joblib
+
+# 1. Carrega a IA treinada e a régua de transformação do hospital
+modelo = joblib.load('modelo_diagnostico_diabetes.joblib')
+escalonador = joblib.load('escalonador_diabetes.joblib')
+
+# 2. Dados do paciente novo (Exemplo estruturado)
+# paciente_novo = ... (Seus dados aqui)
+
+# 3. Escalonamento e Previsão
+# dados_escalonados = escalonador.transform(paciente_novo)
+# diagnostico = modelo.predict(dados_escalonados)
+
+🧠 Destaques da Arquitetura de Dados
+
+Este projeto foi construído seguindo as melhores práticas da indústria de Engenharia e Ciência de Dados:
+
+    Prevenção de Data Leakage: O StandardScaler é ajustado apenas nos dados de treino, impedindo que o modelo "espie" as variações dos dados de teste.
+
+    Auditoria Robusta: A função auditar_e_corrigir_dados inspeciona silenciosamente os dados vitais. Caso falte o IMC ou Glicose, imputa a Média. Caso falte gênero ou status de fumante, imputa a Moda.
+
+    Tunning contra Overfitting: A Árvore de Decisão foi instanciada com limites lógicos (max_depth=5) e um balanceador de classes (class_weight='balanced'), impedindo-a de decorar o gabarito de pacientes saudáveis.
+
+💻 Tecnologias Utilizadas
+
+    Python: Linguagem base.
+
+    Pandas & NumPy: Ingestão, limpeza, tratamento e manipulação de DataFrames.
+
+    Scikit-Learn: Pré-processamento matemático e instanciação do algoritmo de Machine Learning.
+
+    Matplotlib & Seaborn: Visualização gráfica de alto nível.
+
+    Joblib: Serialização e exportação do modelo (Deploy).
+
+🤝 Como Contribuir
+
+Contribuições são muito bem-vindas! Se você tem alguma ideia para melhorar este modelo (como testar um Random Forest ou XGBoost), siga os passos:
+
+    Faça um Fork do projeto
+
+    Crie uma nova Branch (git checkout -b feature/NovaAnalise)
+
+    Faça o Commit das suas alterações (git commit -m 'Adicionando novo modelo preditivo')
+
+    Faça o Push para a Branch (git push origin feature/NovaAnalise)
+
+    Abra um Pull Request
+
+📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+✉️ Contato
+
+Desenvolvido por João Vitor Ribeiro Dolabella.
+
+    LinkedIn: Acesse meu perfil profissional
+
+    E-mail: dolabella.dev@gmail.com
